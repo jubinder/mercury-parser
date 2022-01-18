@@ -32,10 +32,7 @@ export function validateResponse(response, parseNon200 = false) {
   // statusMessage only not set in nock response, in which case
   // I check statusCode, which is currently only 200 for OK responses
   // in tests
-  if (
-    (response.statusMessage && response.statusMessage !== 'OK') ||
-    response.statusCode !== 200
-  ) {
+  if (response.statusCode !== 200) {
     if (!response.statusCode) {
       throw new Error(
         `Unable to fetch content. Original exception was ${response.error}`
