@@ -266,7 +266,7 @@ function validateResponse(response) {
   // statusMessage only not set in nock response, in which case
   // I check statusCode, which is currently only 200 for OK responses
   // in tests
-  if (response.statusMessage && response.statusMessage !== 'OK' || response.statusCode !== 200) {
+  if (response.statusCode !== 200) {
     if (!response.statusCode) {
       throw new Error("Unable to fetch content. Original exception was ".concat(response.error));
     } else if (!parseNon200) {
@@ -7156,7 +7156,29 @@ var GenericExcerptExtractor = {
 
     if (excerpt) {
       return clean(stripTags(excerpt, $), $, 10000);
-    } // Fall back to excerpting from the extracted content
+    } // First paragraph fallback
+
+
+    var $content = $('<div>' + content + '</div>');
+    var $pElements = $content.find('p');
+    var $pElementsWithText = $pElements.filter(function () {
+      return $(this).text().trim().length > 30;
+    });
+
+    if ($pElementsWithText.length > 1) {
+      return $pElementsWithText.first().text();
+    }
+    /*
+    // First div fallback
+    var $divElements = $content.find('div');
+    var $divElementsWithText = $divElements.filter(function(){
+    	return $(this).text().trim().length > 30;
+    })
+    if($divElementsWithText.length > 1){
+    	return $divElementsWithText.first().text();
+    }	
+    */
+    // Fall back to excerpting from the extracted content
 
 
     var maxLength = 500;
