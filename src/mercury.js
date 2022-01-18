@@ -99,6 +99,7 @@ const Mercury = {
         ...result,
         total_pages: 1,
         rendered_pages: 1,
+		html: html
       };
     }
 
